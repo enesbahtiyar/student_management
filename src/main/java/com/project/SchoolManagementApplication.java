@@ -1,4 +1,4 @@
-package com.project.schoolmanagment;
+package com.project;
 
 
 import org.springframework.boot.SpringApplication;
