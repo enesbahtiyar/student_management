@@ -24,6 +24,9 @@ public class AdvisoryTeacher
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 
+    @OneToOne
+    private Teacher teacher;
+
 
     //TODO learn about the cascade types
     @OneToMany(mappedBy = "advisoryTeacher", cascade = CascadeType.ALL)

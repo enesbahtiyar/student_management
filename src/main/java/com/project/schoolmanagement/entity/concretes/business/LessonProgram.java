@@ -28,19 +28,21 @@ public class LessonProgram
     @Enumerated(EnumType.STRING)
     private Day day;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime startTime;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime stopTime;
 
+
     @JsonIgnore
+    @ManyToMany
     @JoinTable(
             name = "lesson_program_lesson",
             joinColumns = @JoinColumn(name = "lessonprogram_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_id")
     )
-    private Set<Lesson> lessons;
+    private Set<Lesson>lessons;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
