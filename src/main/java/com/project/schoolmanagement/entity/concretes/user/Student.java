@@ -3,6 +3,9 @@ package com.project.schoolmanagement.entity.concretes.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.schoolmanagement.entity.abstracts.User;
+import com.project.schoolmanagement.entity.concretes.business.LessonProgram;
+import com.project.schoolmanagement.entity.concretes.business.Meet;
+import com.project.schoolmanagement.entity.concretes.business.StudentInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +15,8 @@ import net.bytebuddy.implementation.bind.annotation.Super;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -36,4 +41,24 @@ public class Student extends User
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "advisory_teacher_id")
     private AdvisoryTeacher advisoryTeacher;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<StudentInfo> studentInfos;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "student_lessonprogram",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
+    private Set<LessonProgram> lessonsProgramList;
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "meet_student_table",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "meet_id"))
+    private List<Meet> meetList;
 }

@@ -1,6 +1,9 @@
 package com.project.schoolmanagement.entity.concretes.business;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.schoolmanagement.entity.concretes.user.Student;
+import com.project.schoolmanagement.entity.enums.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +22,6 @@ public class StudentInfo
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private Integer absentee;
 
     private Double midtermExam;
@@ -32,4 +34,14 @@ public class StudentInfo
 
     @ManyToOne
     private Student student;
+
+    @Enumerated(EnumType.STRING)
+    private Note letterGrade;
+
+    @ManyToOne
+    @JsonIgnoreProperties("lesson")
+    private Lesson lesson;
+
+    @OneToOne
+    private EducationTerm educationTerm;
 }
