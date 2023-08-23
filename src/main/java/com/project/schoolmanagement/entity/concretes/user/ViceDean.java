@@ -14,6 +14,6 @@ import javax.persistence.Entity;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class WiseDean extends User
+public class ViceDean extends User
 {
 }

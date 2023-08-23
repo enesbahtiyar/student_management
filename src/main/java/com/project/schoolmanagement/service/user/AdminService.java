@@ -8,6 +8,7 @@ import com.project.schoolmanagement.payload.request.user.AdminRequest;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.AdminResponse;
 import com.project.schoolmanagement.repository.user.AdminRepository;
+import com.project.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,13 @@ public class AdminService
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
     private final UserRoleService userRoleService;
+    private final UniquePropertyValidator uniquePropertyValidator;
 
     public ResponseMessage<AdminResponse> saveAdmin(AdminRequest adminRequest)
     {
+        uniquePropertyValidator.checkDuplicate(adminRequest.getUsername(),
+                                              adminRequest.getSsn(),
+                                              adminRequest.getPhoneNumber());
         //map dta -> entity
         Admin admin = adminMapper.mapAdminRequestToAdmin(adminRequest);
 
