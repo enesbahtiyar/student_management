@@ -1,6 +1,17 @@
 package com.project.schoolmanagement.payload.response.user;
 
 
-public class AdminResponse
+import com.project.schoolmanagement.payload.response.abstracts.BaseUserResponse;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@SuperBuilder
+public class AdminResponse extends BaseUserResponse
 {
+
 }
