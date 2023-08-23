@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public abstract class BaseUserRequest
 {
     @NotNull(message = "Please enter your username")
-    @Size(min = 4, max = 16, message = "Your username must be 4-16 chars long")
-    @Pattern(regexp = "\\A(?!\\S*\\z).+", message = "Your username must consist of characters")
+    @Size(min = 4, max = 16,message = "Your username should be at least 4 chars")
+    @Pattern(regexp = "\\A(?!\\s*\\Z).+", message = "Your username must consist of the characters .")
     private String username;
 
     @NotNull(message = "Please enter your name")
