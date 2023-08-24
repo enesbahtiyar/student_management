@@ -1,18 +1,19 @@
 package com.project.schoolmanagement.controller.user;
 
 
+import com.project.schoolmanagement.entity.concretes.user.Admin;
 import com.project.schoolmanagement.payload.request.user.AdminRequest;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.AdminResponse;
 import com.project.schoolmanagement.service.user.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -26,4 +27,56 @@ public class AdminController
     {
         return ResponseEntity.ok(adminService.saveAdmin(adminRequest));
     }
+
+    @GetMapping("/getAllAdminsByPage")
+    public ResponseEntity<Page<Admin>> getAllAdminsByPage(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "name") String sort,
+            @RequestParam(value = "type", defaultValue = "desc") String type
+    )
+    {
+        Page<Admin> admins = adminService.getAllAdminsByPage(page,size,sort,type);
+        return new ResponseEntity<>(admins, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteByAdmin(@PathVariable Long id)
+    {
+        return ResponseEntity.ok(adminService.deleteById(id));
+    }
+
+
+    /*
+    //TODO:
+    @GetMapping("/getAllAdmins")
+    public ResponseEntity<List<AdminResponse>> getAllAdmins()
+    {
+        return null;
+    }
+
+    //TODO:
+    @GetMapping("/getAdminById")
+    public ResponseEntity<AdminResponse> getAdminById(Long id)
+    {
+        return null;
+    }
+
+    //TODO:
+    @GetMapping("/getAdminByUserName/{username}")
+    public ResponseEntity<List<AdminResponse>> findAdminsByUsername(@PathVariable String username)
+    {
+        return null;
+    }
+
+    //TODO:
+    @GetMapping("getAdminByNameOrLastName")
+    public ResponseEntity<List<AdminResponse>> getAdminByNameOrLastName(@RequestParam String query)
+    {
+
+    }
+
+     */
+
+
 }
