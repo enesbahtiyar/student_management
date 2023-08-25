@@ -18,8 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,18 +72,31 @@ public class AdminService
 
     public String deleteById(Long id)
     {
-        Optional<Admin> admin = adminRepository.findById(id);
-        if(admin.isEmpty())
-        {
-            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, id));
-        }
-        else if (admin.get().isBuiltIn())
+        if (findAdminById(id).isBuiltIn())
         {
             throw new ConflictException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
         }
-
         adminRepository.deleteById(id);
-
         return String.format(SuccessMessages.ADMIN_DELETE, id);
+    }
+
+    private Admin findAdminById(Long id)
+    {
+        return  adminRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,1)));
+    }
+
+    public AdminResponse findById(Long id)
+    {
+        return adminMapper.mapAdminToAdminResponse(findAdminById(id));
+    }
+
+
+    public List<AdminResponse> findAdminsByUsername(String username) {
+        List<Admin> admins = adminRepository.findByUsername(username);
+        if(admins.isEmpty()){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE_USERNAME,username));
+        }
+        return adminRepository.findByUsername(username).stream().map(adminMapper::mapAdminToAdminResponse).collect(Collectors.toList());
     }
 }

@@ -48,35 +48,32 @@ public class AdminController
 
 
     /*
-    //TODO:
     @GetMapping("/getAllAdmins")
     public ResponseEntity<List<AdminResponse>> getAllAdmins()
     {
         return null;
     }
+     */
 
-    //TODO:
-    @GetMapping("/getAdminById")
-    public ResponseEntity<AdminResponse> getAdminById(Long id)
+    @GetMapping("/getAdminById/{id}")
+    public ResponseEntity<AdminResponse>getAdminById(@PathVariable Long id)
     {
-        return null;
+        return ResponseEntity.ok(adminService.findById(id));
     }
 
-    //TODO:
     @GetMapping("/getAdminByUserName/{username}")
-    public ResponseEntity<List<AdminResponse>> findAdminsByUsername(@PathVariable String username)
-    {
-        return null;
+    public ResponseEntity<List<AdminResponse>>findAdminsByUsername(@PathVariable String username){
+        return ResponseEntity.ok(adminService.findAdminsByUsername(username));
     }
-
-    //TODO:
+    /*
     @GetMapping("getAdminByNameOrLastName")
     public ResponseEntity<List<AdminResponse>> getAdminByNameOrLastName(@RequestParam String query)
     {
 
     }
-
      */
+
+
 
 
 }
