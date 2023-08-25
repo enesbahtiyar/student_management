@@ -2,6 +2,7 @@ package com.project.schoolmanagement.payload.mappers;
 
 import com.project.schoolmanagement.entity.concretes.user.Admin;
 import com.project.schoolmanagement.entity.concretes.user.Dean;
+import com.project.schoolmanagement.entity.enums.RoleType;
 import com.project.schoolmanagement.payload.request.user.AdminRequest;
 import com.project.schoolmanagement.payload.request.user.DeanRequest;
 import com.project.schoolmanagement.payload.response.user.DeanResponse;
@@ -43,6 +44,22 @@ public class DeanMapper
                 .phoneNumber(dean.getPhoneNumber())
                 .gender(dean.getGender())
                 .ssn(dean.getSsn())
+                .build();
+    }
+
+    public Dean mapDeanRequestToUpdatedDean(DeanRequest deanRequest, Long managerId)
+    {
+        return Dean.builder()
+                .id(managerId)
+                .username(deanRequest.getUsername())
+                .ssn(deanRequest.getSsn())
+                .name(deanRequest.getName())
+                .surname(deanRequest.getSurname())
+                .birthPlace(deanRequest.getBirthPlace())
+                .birthDay(deanRequest.getBirthDay())
+                .phoneNumber(deanRequest.getPhoneNumber())
+                .gender(deanRequest.getGender())
+                .userRole(userRoleService.getUserRole(RoleType.MANAGER))
                 .build();
     }
 }

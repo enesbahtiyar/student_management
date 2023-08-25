@@ -54,6 +54,14 @@ public class DeanService
     public ResponseMessage<DeanResponse> updateDeanById(Long id, DeanRequest deanRequest)
     {
         Dean dean = isDeanExit(id);
+        uniquePropertyValidator.checkUniqueProperties(dean, deanRequest);
+        Dean updatedDean = deanMapper.mapDeanRequestToUpdatedDean(deanRequest, id);
+        Dean savedDean = deanRepository.save(updatedDean);
 
+        return ResponseMessage.<DeanResponse>builder()
+                .message(SuccessMessages.DEAN_UPDATE)
+                .object(deanMapper.mapDeanToDeanResponse(savedDean))
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 }
