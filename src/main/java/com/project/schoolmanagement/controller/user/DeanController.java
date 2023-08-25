@@ -5,10 +5,7 @@ import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.DeanResponse;
 import com.project.schoolmanagement.service.user.DeanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,5 +20,12 @@ public class DeanController
     public ResponseMessage<DeanResponse> saveDean(@RequestBody @Valid DeanRequest deanRequest)
     {
         return deanService.saveDean(deanRequest);
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseMessage<DeanResponse> updateDeanById(@PathVariable Long id,
+                                                        @RequestBody @Valid DeanRequest deanRequest)
+    {
+        return deanService.updateDeanById(id, deanRequest);
     }
 }

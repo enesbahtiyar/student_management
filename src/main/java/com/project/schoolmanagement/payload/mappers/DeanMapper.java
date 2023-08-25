@@ -15,7 +15,7 @@ public class DeanMapper
 {
     private final UserRoleService userRoleService;
 
-    public Dean mapAdminRequestToAdmin(DeanRequest deanRequest)
+    public Dean mapDeanRequestToDean(DeanRequest deanRequest)
     {
         return Dean.builder()
                 .username(deanRequest.getUsername())
