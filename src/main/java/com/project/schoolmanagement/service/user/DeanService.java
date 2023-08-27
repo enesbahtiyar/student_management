@@ -67,7 +67,8 @@ public class DeanService
                 .build();
     }
 
-    public Page<DeanResponse> getAllDeansByPage(int page, int size, String sort, String type) {
+    public Page<DeanResponse> getAllDeansByPage(int page, int size, String sort, String type)
+    {
         Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort,type);
         return deanRepository.findAll(pageable).map(deanMapper::mapDeanToDeanResponse);
     }
