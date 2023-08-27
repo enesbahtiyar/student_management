@@ -46,14 +46,10 @@ public class AdminController
         return ResponseEntity.ok(adminService.deleteById(id));
     }
 
-
-    /*
     @GetMapping("/getAllAdmins")
-    public ResponseEntity<List<AdminResponse>> getAllAdmins()
-    {
-        return null;
+    public ResponseEntity<List<AdminResponse>>getAllAdmins(){
+        return ResponseEntity.ok(adminService.getAllAdmins());
     }
-     */
 
     @GetMapping("/getAdminById/{id}")
     public ResponseEntity<AdminResponse>getAdminById(@PathVariable Long id)
@@ -65,15 +61,11 @@ public class AdminController
     public ResponseEntity<List<AdminResponse>>findAdminsByUsername(@PathVariable String username){
         return ResponseEntity.ok(adminService.findAdminsByUsername(username));
     }
-    /*
-    @GetMapping("getAdminByNameOrLastName")
-    public ResponseEntity<List<AdminResponse>> getAdminByNameOrLastName(@RequestParam String query)
-    {
 
+
+    @GetMapping("/getAdminByNameOrLastname")
+    public ResponseEntity<List<AdminResponse>>getAdminByNameOrLastname(@RequestParam String nameOrSurname){
+        return ResponseEntity.ok(adminService.getAdminByNameOrLastname(nameOrSurname));
     }
-     */
-
-
-
 
 }
