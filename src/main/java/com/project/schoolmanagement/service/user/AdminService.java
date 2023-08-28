@@ -4,7 +4,7 @@ import com.project.schoolmanagement.entity.concretes.user.Admin;
 import com.project.schoolmanagement.entity.enums.RoleType;
 import com.project.schoolmanagement.exception.ConflictException;
 import com.project.schoolmanagement.exception.ResourceNotFoundException;
-import com.project.schoolmanagement.payload.mappers.AdminMapper;
+import com.project.schoolmanagement.payload.mappers.user.AdminMapper;
 import com.project.schoolmanagement.payload.messages.ErrorMessages;
 import com.project.schoolmanagement.payload.messages.SuccessMessages;
 import com.project.schoolmanagement.payload.request.user.AdminRequest;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

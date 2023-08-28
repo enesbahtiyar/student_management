@@ -3,7 +3,7 @@ package com.project.schoolmanagement.service.user;
 import com.project.schoolmanagement.entity.concretes.user.ViceDean;
 import com.project.schoolmanagement.entity.enums.RoleType;
 import com.project.schoolmanagement.exception.ResourceNotFoundException;
-import com.project.schoolmanagement.payload.mappers.ViceDeanMapper;
+import com.project.schoolmanagement.payload.mappers.user.ViceDeanMapper;
 import com.project.schoolmanagement.payload.messages.ErrorMessages;
 import com.project.schoolmanagement.payload.messages.SuccessMessages;
 import com.project.schoolmanagement.payload.request.user.ViceDeanRequest;

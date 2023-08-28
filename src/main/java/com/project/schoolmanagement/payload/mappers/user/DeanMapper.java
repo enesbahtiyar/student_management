@@ -1,4 +1,4 @@
-package com.project.schoolmanagement.payload.mappers;
+package com.project.schoolmanagement.payload.mappers.user;
 
 import com.project.schoolmanagement.entity.concretes.user.Admin;
 import com.project.schoolmanagement.entity.concretes.user.Dean;
