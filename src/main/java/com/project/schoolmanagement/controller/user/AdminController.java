@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,17 +19,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class AdminController
 {
     private final AdminService adminService;
 
     @PostMapping("/save")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<ResponseMessage<AdminResponse>> saveAdmin(@RequestBody @Valid AdminRequest adminRequest)
     {
         return ResponseEntity.ok(adminService.saveAdmin(adminRequest));
     }
 
     @GetMapping("/getAllAdminsByPage")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Page<Admin>> getAllAdminsByPage(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
@@ -41,12 +45,14 @@ public class AdminController
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<String> deleteByAdmin(@PathVariable Long id)
     {
         return ResponseEntity.ok(adminService.deleteById(id));
     }
 
     @GetMapping("/getAllAdmins")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<AdminResponse>>getAllAdmins(){
         return ResponseEntity.ok(adminService.getAllAdmins());
     }

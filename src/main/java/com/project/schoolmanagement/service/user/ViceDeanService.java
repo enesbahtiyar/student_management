@@ -10,9 +10,11 @@ import com.project.schoolmanagement.payload.request.user.ViceDeanRequest;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.ViceDeanResponse;
 import com.project.schoolmanagement.repository.user.ViceDeanRepository;
+import com.project.schoolmanagement.service.helper.PageableHelper;
 import com.project.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +25,8 @@ public class ViceDeanService {
     private final UniquePropertyValidator uniquePropertyValidator;
     private final ViceDeanMapper viceDeanMapper;
     private final UserRoleService userRoleService;
+    private final PasswordEncoder passwordEncoder;
+    private final PageableHelper pageableHelper;
 
 
 
@@ -39,8 +43,9 @@ public class ViceDeanService {
                 viceDeanRequest.getPhoneNumber());
 
         ViceDean viceDean = viceDeanMapper.mapViceDeanRequestToViceDean(viceDeanRequest);
-
         viceDean.setUserRole(userRoleService.getUserRole(RoleType.ASSISTANT_MANAGER));
+        viceDean.setPassword(passwordEncoder.encode(viceDeanRequest.getPassword()));
+
         ViceDean savedViceDean = viceDeanRepository.save(viceDean);
         return ResponseMessage.<ViceDeanResponse>builder()
                 .message(SuccessMessages.VICE_DEAN_SAVE)

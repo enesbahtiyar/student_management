@@ -5,6 +5,7 @@ import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.ViceDeanResponse;
 import com.project.schoolmanagement.service.user.ViceDeanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/viceDean")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANT_MANAGER')")
 public class ViceDeanController {
 
     public final ViceDeanService viceDeanService;

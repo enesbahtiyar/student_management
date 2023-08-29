@@ -16,6 +16,7 @@ import com.project.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class AdminService
     private final UserRoleService userRoleService;
     private final UniquePropertyValidator uniquePropertyValidator;
     private final PageableHelper pageableHelper;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseMessage<AdminResponse> saveAdmin(AdminRequest adminRequest)
     {
@@ -48,7 +50,7 @@ public class AdminService
         {
             admin.setBuiltIn(true);
         }
-
+        admin.setPassword(passwordEncoder.encode(adminRequest.getPassword()));
         Admin savedAdmin = adminRepository.save(admin);
 
         //returning response dto by mapping the saved version of admin.

@@ -6,6 +6,7 @@ import com.project.schoolmanagement.payload.response.user.DeanResponse;
 import com.project.schoolmanagement.service.user.DeanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/dean")
+@PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
 public class DeanController
 {
     private final DeanService deanService;

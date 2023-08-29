@@ -21,7 +21,7 @@ import java.util.Map;
  * this class will be responsible for possible authentication errros handling
  */
 @Component
-public class AuthEntryPointJwt implements AuthenticationEntryPoint
+public class  AuthEntryPointJwt implements AuthenticationEntryPoint
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 

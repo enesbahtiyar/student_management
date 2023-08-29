@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +28,7 @@ public class DeanService
     private final UniquePropertyValidator uniquePropertyValidator;
     private final PageableHelper pageableHelper;
     private final DeanMapper deanMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private Dean isDeanExit(Long id)
     {
@@ -45,6 +47,7 @@ public class DeanService
         Dean dean = deanMapper.mapDeanRequestToDean(deanRequest);
 
         dean.setUserRole(userRoleService.getUserRole(RoleType.MANAGER));
+        dean.setPassword(passwordEncoder.encode(deanRequest.getPassword()));
         Dean savedDean = deanRepository.save(dean);
         return ResponseMessage.<DeanResponse>builder()
                 .message(SuccessMessages.DEAN_SAVE)
