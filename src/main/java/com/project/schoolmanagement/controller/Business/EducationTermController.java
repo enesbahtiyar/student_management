@@ -17,14 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/educationTerms")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'ASSISTANT_MANAGER', 'TEACHER')")
 public class EducationTermController
 {
     private final EducationTermService educationTermService;
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    public ResponseMessage<EducationTermResponse> saveEducationTerm(@RequestBody @Valid EducationTermRequest educationTermRequest)
+    public ResponseMessage<EducationTermResponse> saveEducationTerm(@Valid @RequestBody EducationTermRequest educationTermRequest)
     {
         return educationTermService.saveEducationTerm(educationTermRequest);
     }
@@ -66,5 +65,25 @@ public class EducationTermController
             @RequestParam(value = "type", defaultValue = "desc")String type)
     {
         return educationTermService.getAllEducationTermByPage(page,size,sort,type);
+    }
+
+    @GetMapping("/searchByYear/{year}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    public List<EducationTermResponse> searchByYear(@PathVariable Integer year){
+        return educationTermService.getEducationTermByYear(year);
+    }
+
+    @GetMapping("/searchByStartDate")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    public List<EducationTermResponse> searchByStartDate(@RequestParam String firstDateString,
+                                                         @RequestParam String secondDateString){
+        return educationTermService.getEducationTermByByStartDate(firstDateString,secondDateString);
+    }
+
+
+    @GetMapping("/searchByDateSince/{startDateString}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    public List<EducationTermResponse> searchByDateSince(@PathVariable String startDateString){
+        return educationTermService.getEducationTermsByDateSince(startDateString);
     }
 }

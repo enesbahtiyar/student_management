@@ -34,20 +34,20 @@ public class  AuthEntryPointJwt implements AuthenticationEntryPoint
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException
     {
-        //error will be logged in console and/or to a file
-        LOGGER.error("Unauthorized error : {}", authException.getMessage());
+        // error will be loggged in console and/or to a file
+        LOGGER.error("Unauthorized error : {}" , authException.getMessage());
         //we are setting the content type of the message
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         //we are setting the response status
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        final Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error", "Unauthorized");
-        body.put("message", authException.getMessage());
-        body.put("path", request.getServletPath());
+        final Map<String,Object>body = new HashMap<>();
+        body.put("status",HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("error","Unauthorized");
+        body.put("message",authException.getMessage());
+        body.put("path",request.getServletPath());
 
-        final  ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(response.getOutputStream(), body);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(response.getOutputStream(),body);
     }
 }

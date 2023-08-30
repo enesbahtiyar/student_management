@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,5 +116,35 @@ public class EducationTermService
     {
         Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort,type);
         return educationTermRepository.findAll(pageable).map(educationTermMapper::mapEducationTermToEducationTermResponse);
+    }
+
+    public List<EducationTermResponse> getEducationTermByYear(Integer year) {
+        List<EducationTerm> educationTerms = educationTermRepository.findAllByStartDateYear(year);
+        if(educationTerms.isEmpty()){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.EDUCATION_TERM_NOT_FOUND_BY_YEAR_MESSAGE,year));
+        }
+        return educationTerms.stream().map(educationTermMapper::mapEducationTermToEducationTermResponse).collect(Collectors.toList());
+    }
+
+    public List<EducationTermResponse> getEducationTermByByStartDate(String firstDateString, String secondDateString) {
+        try {
+            LocalDate firstDate = LocalDate.parse(firstDateString);
+            LocalDate secondDate = LocalDate.parse(secondDateString);
+
+            return educationTermRepository.findEducationTermBetweenDates(firstDate, secondDate)
+                    .stream().map(educationTermMapper::mapEducationTermToEducationTermResponse).collect(Collectors.toList());
+        } catch (DateTimeParseException e) {
+            throw new ConflictException(ErrorMessages.EDUCATION_TERM_WRONG_DATE_FORMAT_MESSAGE);
+        }
+    }
+
+    public List<EducationTermResponse> getEducationTermsByDateSince(String startDateString) {
+        try {
+            LocalDate startDate = LocalDate.parse(startDateString);
+            return educationTermRepository.getEducationTermsByStartDateAfter(startDate)
+                    .stream().map(educationTermMapper::mapEducationTermToEducationTermResponse).collect(Collectors.toList());
+        } catch (DateTimeParseException e) {
+            throw new ConflictException(ErrorMessages.EDUCATION_TERM_WRONG_DATE_FORMAT_MESSAGE);
+        }
     }
 }

@@ -13,17 +13,18 @@ import java.util.Date;
 @Component
 public class JwtUtils
 {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${backendapi.app.jwtExpirationMs}")
-    private Long jwtExpirationMs;
+    private long jwtExpirationMs;
 
     @Value("${backendapi.app.jwtSecret}")
     private String jwtSecret;
 
     public boolean validateJwtToken(String jwtToken){
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(jwtToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwtToken);
             return true;
         } catch (ExpiredJwtException e) {
             LOGGER.error("Jwt token is expired : {}", e.getMessage());
@@ -39,9 +40,8 @@ public class JwtUtils
         return false;
     }
 
-    public String generateJwtToken(Authentication authentication)
-    {
-        //get info of logged-in user from context
+    public String generateJwtToken(Authentication authentication){
+        // get info of logged-in user from context
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return generateTokenFromUsername(userDetails.getUsername());
     }
@@ -49,25 +49,23 @@ public class JwtUtils
     /**
      *
      * @param username of the user
-     * @return signed jwt with algorithm and its expiration date
+     * @return signed JWT with algorithm and it's expiration date.
      */
-    public String generateTokenFromUsername(String username)
-    {
+    public String generateTokenFromUsername(String username){
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
+                .setExpiration(new Date(new Date().getTime()+jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
     /**
      *
-     * @param token jwt token signed with algorithm
+     * @param token JWT token signed with algorithm.
      * @return username for user
      */
-    public String getUsernameFromJwtToken(String token)
-    {
+    public String getUserNameFromJwtToken(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
