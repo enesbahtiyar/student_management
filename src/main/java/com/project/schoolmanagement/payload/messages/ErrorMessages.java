@@ -26,4 +26,8 @@ public abstract class ErrorMessages
     public static final String EDUCATION_TERM_NOT_FOUND_BY_YEAR_MESSAGE = "Error: Education Term with year %s not found" ;
     public static final String EDUCATION_TERM_WRONG_DATE_FORMAT_MESSAGE = "Error: Wrong Date Format" ;
 
+    //lesson
+    public static final String ALREADY_REGISTER_LESSON_MESSAGE = "Error: Lesson with lesson name %s already registered" ;
+    public static final String NOT_FOUND_LESSON_MESSAGE = "Error: Lesson with this field %s not found";
+
 }
