@@ -24,7 +24,6 @@ public class LessonProgramController
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'AssıstantManager')")
     public ResponseMessage<LessonProgram> saveLessonProgram(@RequestBody @Valid LessonProgramRequest lessonProgramRequest)
     {
-        //return lessonProgramService.saveLessonProgram(lessonProgramRequest);
-        return null;
+        return lessonProgramService.saveLessonProgram(lessonProgramRequest);
     }
 }
