@@ -3,7 +3,7 @@ package com.project.schoolmanagement.controller.Business;
 import com.project.schoolmanagement.entity.concretes.business.LessonProgram;
 import com.project.schoolmanagement.payload.request.business.LessonProgramRequest;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
-import com.project.schoolmanagement.service.user.LessonProgramService;
+import com.project.schoolmanagement.service.business.LessonProgramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;

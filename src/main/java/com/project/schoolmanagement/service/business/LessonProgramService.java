@@ -1,4 +1,4 @@
-package com.project.schoolmanagement.service.user;
+package com.project.schoolmanagement.service.business;
 
 import org.springframework.stereotype.Service;
 
