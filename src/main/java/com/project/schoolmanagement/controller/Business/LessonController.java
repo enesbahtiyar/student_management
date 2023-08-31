@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 /** CONTROLLER
@@ -60,6 +61,12 @@ public class LessonController
     public Set<Lesson> getAllLessonById(@RequestParam(name = "lessonId") Set<Long> idSet)
     {
         return lessonService.getAllLessonByLessonId(idSet);
+    }
+
+    @GetMapping("/getLessonsByCreditScoreGreaterThan")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public ResponseMessage<List<LessonResponse>> getLessonsByCreditScoreGreaterThan(@RequestParam(name = "creditScore") Integer givenValue) {
+        return lessonService.getLessonsByCreditScoreGreaterThan(givenValue);
     }
 
 

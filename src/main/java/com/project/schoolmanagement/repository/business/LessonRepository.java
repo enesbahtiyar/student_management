@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,4 +21,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long>
     //pay attention of usage "lessonIds" parameter
     @Query(value = "SELECT l FROM Lesson l WHERE l.id IN :lessonIds")
     Set<Lesson>getLessonByLessonIdIList(Set<Long> lessonIds);
+
+    List<Lesson> getLessonsByCreditScoreGreaterThanEqual(Integer creditScore);
 }

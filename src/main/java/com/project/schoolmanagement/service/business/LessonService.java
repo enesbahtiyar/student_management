@@ -15,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -84,5 +86,26 @@ public class LessonService
     {
         idSet.forEach(this::findLessonById);
         return lessonRepository.getLessonByLessonIdIList(idSet);
+    }
+
+    public ResponseMessage<List<LessonResponse>> getLessonsByCreditScoreGreaterThan(Integer givenValue) {
+        List<LessonResponse> lessonResponse = lessonRepository.getLessonsByCreditScoreGreaterThanEqual(givenValue).
+                stream().
+                map(lessonMapper::mapLessonToLessonResponse).
+                collect(Collectors.toList());
+
+        if(lessonResponse.isEmpty()) {
+            return ResponseMessage.<List<LessonResponse>>builder()
+                    .message(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE, givenValue))
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .object(lessonResponse)
+                    .build();
+        }
+
+        return ResponseMessage.<List<LessonResponse>>builder()
+                .message(String.format(SuccessMessages.LESSON_FOUND, givenValue))
+                .httpStatus(HttpStatus.FOUND)
+                .object(lessonResponse)
+                .build();
     }
 }
