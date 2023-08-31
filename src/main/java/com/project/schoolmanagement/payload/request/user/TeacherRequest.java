@@ -18,6 +18,7 @@ import java.util.Set;
 @SuperBuilder
 public class TeacherRequest extends BaseUserRequest
 {
+    //TODO: property should be changed
     @NotNull(message = "Please select Lesson")
     private Set<Long> lessonsIdList;
 

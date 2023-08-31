@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +76,24 @@ public class LessonProgramService
 
     public List<LessonProgramResponse> getAllLessonProgramUnassigned()
     {
+        return lessonProgramRepository.findByTeachers_IdNull()
+                .stream()
+                .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse)
+                .collect(Collectors.toList());
+    }
 
+    public List<LessonProgramResponse> getAllLessonProgramAssigned()
+    {
+        return lessonProgramRepository.findByTeachers_IdNotNull()
+                .stream()
+                .map(lessonProgramMapper::mapLessonProgramToLessonProgramResponse)
+                .collect(Collectors.toList());
+    }
+
+    public Set<LessonProgram> getLessonProgramById(Set<Long> lessonProgramSet)
+    {
+        return lessonProgramSet.stream()
+                .map(this::findLessonProgramById)
+                .collect(Collectors.toSet());
     }
 }

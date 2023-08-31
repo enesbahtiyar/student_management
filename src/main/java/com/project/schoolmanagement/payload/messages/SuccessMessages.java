@@ -17,6 +17,18 @@ public abstract class SuccessMessages
     public static final String VICE_DEAN_SAVE = "ViceDean is Saved";
     public static final String VICE_DEAN_UPDATE = "ViceDean is Updated Successfully";
 
+    //Student
+    public static final String STUDENT_SAVE = "Student is Saved";
+    public static final String STUDENT_UPDATE = "Student is Updated Successfully";
+    public static final String STUDENT_FOUND = "Student is Found Successfully";
+    public static final String STUDENT_DELETE = "Student is Deleted Successfully";
+
+    //Teacher
+    public static final String TEACHER_SAVE = "Teacher is Saved";
+    public static final String TEACHER_UPDATE = "Teacher is Updated Successfully";
+    public static final String TEACHER_FOUND = "Teacher is Found Successfully";
+    public static final String TEACHER_DELETE = "Teacher is Deleted Successfully";
+
     //Education term
     public static final String EDUCATION_TERM_SAVE = "Education Term is Saved";
     public static final String EDUCATION_TERM_UPDATE = "Education Term is Updated Successfully";
