@@ -3,7 +3,9 @@ package com.project.schoolmanagement.service.business;
 import com.project.schoolmanagement.entity.concretes.business.EducationTerm;
 import com.project.schoolmanagement.entity.concretes.business.Lesson;
 import com.project.schoolmanagement.entity.concretes.business.LessonProgram;
+import com.project.schoolmanagement.exception.ResourceNotFoundException;
 import com.project.schoolmanagement.payload.mappers.business.LessonProgramMapper;
+import com.project.schoolmanagement.payload.messages.ErrorMessages;
 import com.project.schoolmanagement.payload.messages.SuccessMessages;
 import com.project.schoolmanagement.payload.request.business.LessonProgramRequest;
 import com.project.schoolmanagement.payload.response.business.LessonProgramResponse;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -51,5 +54,27 @@ public class LessonProgramService
                 .object(lessonProgramMapper.mapLessonProgramToLessonProgramResponse(savedLessonProgram))
                 .httpStatus(HttpStatus.CREATED)
                 .build();
+    }
+
+    public LessonProgram findLessonProgramById(Long id)
+    {
+        return lessonProgramRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_PROGRAM_MESSAGE, id)));
+    }
+
+    public ResponseMessage deleteLessonProgramById(Long id)
+    {
+        findLessonProgramById(id);
+        lessonProgramRepository.deleteById(id);
+
+        return ResponseMessage.builder()
+                .message(SuccessMessages.LESSON_PROGRAM_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    public List<LessonProgramResponse> getAllLessonProgramUnassigned()
+    {
+
     }
 }
