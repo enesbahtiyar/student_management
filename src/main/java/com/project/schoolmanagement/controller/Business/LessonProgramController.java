@@ -2,6 +2,7 @@ package com.project.schoolmanagement.controller.Business;
 
 import com.project.schoolmanagement.entity.concretes.business.LessonProgram;
 import com.project.schoolmanagement.payload.request.business.LessonProgramRequest;
+import com.project.schoolmanagement.payload.response.business.LessonProgramResponse;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.service.business.LessonProgramService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class LessonProgramController
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'AssıstantManager')")
-    public ResponseMessage<LessonProgram> saveLessonProgram(@RequestBody @Valid LessonProgramRequest lessonProgramRequest)
+    public ResponseMessage<LessonProgramResponse> saveLessonProgram(@RequestBody @Valid LessonProgramRequest lessonProgramRequest)
     {
         return lessonProgramService.saveLessonProgram(lessonProgramRequest);
     }

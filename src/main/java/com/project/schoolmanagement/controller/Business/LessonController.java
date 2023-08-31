@@ -69,5 +69,11 @@ public class LessonController
         return lessonService.getLessonsByCreditScoreGreaterThan(givenValue);
     }
 
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public ResponseMessage<LessonResponse> updateLessonById (@PathVariable Long id, @Valid @RequestBody LessonRequest lessonRequest){
+        return lessonService.updateLessonById(id, lessonRequest);
+    }
+
 
 }

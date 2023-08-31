@@ -108,4 +108,20 @@ public class LessonService
                 .object(lessonResponse)
                 .build();
     }
+
+    public ResponseMessage<LessonResponse> updateLessonById(Long id, LessonRequest lessonRequest) {
+        Lesson lesson = findLessonById(id);
+        if(!lesson.getLessonName().equalsIgnoreCase(lessonRequest.getLessonName())){
+            if(isLessonExistsByName(lessonRequest.getLessonName())){
+                throw  new ConflictException(String.format(ErrorMessages.ALREADY_REGISTER_LESSON_MESSAGE,lessonRequest.getLessonName()));
+            }
+        }
+        Lesson updatedLesson = lessonMapper.mapLessonRequestToUpdateLesson(lessonRequest, id);
+        Lesson savedLesson = lessonRepository.save(updatedLesson);
+        return ResponseMessage.<LessonResponse>builder()
+                .message(SuccessMessages.LESSON_UPDATE)
+                .httpStatus(HttpStatus.OK)
+                .object(lessonMapper.mapLessonToLessonResponse(savedLesson))
+                .build();
+    }
 }
