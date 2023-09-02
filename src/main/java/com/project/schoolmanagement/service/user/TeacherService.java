@@ -9,19 +9,23 @@ import com.project.schoolmanagement.payload.mappers.user.AdminMapper;
 import com.project.schoolmanagement.payload.mappers.user.TeacherMapper;
 import com.project.schoolmanagement.payload.messages.ErrorMessages;
 import com.project.schoolmanagement.payload.messages.SuccessMessages;
+import com.project.schoolmanagement.payload.request.user.ChooseLessonTeacherRequest;
 import com.project.schoolmanagement.payload.request.user.TeacherRequest;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.TeacherResponse;
 import com.project.schoolmanagement.repository.user.TeacherRepository;
 import com.project.schoolmanagement.service.business.LessonProgramService;
 import com.project.schoolmanagement.service.business.LessonService;
+import com.project.schoolmanagement.service.validator.DateTimeValidator;
 import com.project.schoolmanagement.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class TeacherService
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
     private final AdvisorTeacherService advisorTeacherService;
+    private final DateTimeValidator dateTimeValidator;
 
     public ResponseMessage<TeacherResponse> saveTeacher(TeacherRequest teacherRequest)
     {
@@ -86,5 +91,45 @@ public class TeacherService
                 .httpStatus(HttpStatus.OK)
                 .object(teacherMapper.mapTeacherToTeacherResponse(savedTeacher))
                 .build();
+    }
+
+    public List<TeacherResponse> getTeacherByName(String teacherName)
+    {
+        return teacherRepository.getTeacherByNameContaining(teacherName)
+                .stream()
+                .map(teacherMapper::mapTeacherToTeacherResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<TeacherResponse> getAllTeacher()
+    {
+        return teacherRepository.findAll()
+                .stream()
+                .map(teacherMapper::mapTeacherToTeacherResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ResponseMessage<TeacherResponse> chooseLesson(ChooseLessonTeacherRequest chooseLessonTeacherRequest)
+    {
+        //check if the lesson program is exist
+        Set<LessonProgram> lessonPrograms = lessonProgramService.getLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());
+        //check if the teacher is exist -- expected to have
+        Teacher teacher = isTeacherExist(chooseLessonTeacherRequest.getTeacherId());
+        //existing list
+        Set<LessonProgram> teacherLessonProgram = teacher.getLessonsProgramList();
+
+        dateTimeValidator.checkLessonPrograms(teacherLessonProgram, lessonPrograms);
+
+        teacherLessonProgram.addAll(lessonPrograms);
+        teacher.setLessonsProgramList(teacherLessonProgram);
+
+        Teacher updatedTeacher = teacherRepository.save(teacher);
+
+        return ResponseMessage.<TeacherResponse>builder()
+                .message(SuccessMessages.TEACHER_UPDATE)
+                .object(teacherMapper.mapTeacherToTeacherResponse(updatedTeacher))
+                .httpStatus(HttpStatus.OK)
+                .build();
+
     }
 }

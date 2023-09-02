@@ -5,6 +5,8 @@ import com.project.schoolmanagement.entity.concretes.user.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long>
 {
@@ -17,4 +19,8 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long>
     boolean existsByEmail(String email);
 
     Teacher findByUsernameEquals(String username);
+
+    List<Teacher> getTeacherByNameContaining(String teacherName);
+
+    Teacher getTeachersByUsername(String username);
 }
