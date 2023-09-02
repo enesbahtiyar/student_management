@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/lessonPrograms")
@@ -46,5 +48,19 @@ public class LessonProgramController
     public List<LessonProgramResponse> getAllAssigned()
     {
         return lessonProgramService.getAllLessonProgramAssigned();
+    }
+
+    @GetMapping("/getAllLessonProgramByTeacher")
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    public Set<LessonProgramResponse> getAllLessonProgramByTeacherUsername(HttpServletRequest httpServletRequest)
+    {
+        return lessonProgramService.getLessonProgramByTeacher(httpServletRequest);
+    }
+
+    @GetMapping("/getAllLessonProgramByStudent")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    public Set<LessonProgramResponse> getAllLessonProgramByStudentUsername(HttpServletRequest httpServletRequest)
+    {
+        return lessonProgramService.getLessonProgramByStudent(httpServletRequest);
     }
 }

@@ -4,8 +4,10 @@ import com.project.schoolmanagement.entity.concretes.user.AdvisoryTeacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface AdvisorTeacherRepository extends JpaRepository<AdvisoryTeacher, Long>
 {
-
+    Optional<AdvisoryTeacher> getAdvisoryTeacherByTeacherId(Long id);
 }
