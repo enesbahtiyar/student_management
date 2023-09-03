@@ -3,7 +3,9 @@ package com.project.schoolmanagement.service.user;
 import com.project.schoolmanagement.entity.concretes.user.AdvisoryTeacher;
 import com.project.schoolmanagement.entity.concretes.user.Teacher;
 import com.project.schoolmanagement.entity.enums.RoleType;
+import com.project.schoolmanagement.exception.ResourceNotFoundException;
 import com.project.schoolmanagement.payload.mappers.user.AdvisorTeacherMapper;
+import com.project.schoolmanagement.payload.messages.ErrorMessages;
 import com.project.schoolmanagement.repository.user.AdvisorTeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,22 +45,27 @@ public class AdvisorTeacherService
         if(advisoryTeacher.isPresent())
         {
             //will be this new updatedTeacher really an advisoryTeacher
-            if(status)
+            if(!status)
             {
-                advisoryTeacherBuilder.id(advisoryTeacher.get().getId());
-                advisorTeacherRepository.save(advisoryTeacherBuilder.build());
-            }
-            else
-            {
-                //this teacher is not advisoryTeacherAnymore
-                advisorTeacherRepository.deleteById(advisoryTeacher.get().getId());
-            }
 
+                advisorTeacherRepository.deleteById(advisoryTeacher.get().getId());
+                //advisoryTeacherBuilder.id(advisoryTeacher.get().getId());
+                //advisorTeacherRepository.save(advisoryTeacherBuilder.build());
+            }
         }
         else
         {
-            //if it does not exist in db it will be created
-            advisorTeacherRepository.save(advisoryTeacherBuilder.build());
+            if(status)
+            {
+                advisoryTeacherBuilder.id(teacher.getId());
+                advisorTeacherRepository.save(advisoryTeacherBuilder.build());
+            }
         }
+    }
+
+    public AdvisoryTeacher getAdvisoryTeacherBYId(Long id)
+    {
+        return advisorTeacherRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, id)));
     }
 }
