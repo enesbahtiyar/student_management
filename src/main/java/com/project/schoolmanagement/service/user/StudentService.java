@@ -81,4 +81,27 @@ public class StudentService
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
+    public ResponseMessage<StudentResponse> updateStudent(Long id, StudentRequest studentRequest)
+    {
+        Student student = isStudentExist(id);
+        AdvisoryTeacher advisoryTeacher = advisorTeacherService.getAdvisoryTeacherBYId(studentRequest.getAdvisorTeacherId());
+        //existing student is being used for validation
+        uniquePropertyValidator.checkUniqueProperties(student, studentRequest);
+
+        Student studentForUpdate = studentMapper.mapStudentRequestToUpdatedStudent(studentRequest, id);
+        studentForUpdate.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
+        studentForUpdate.setAdvisoryTeacher(advisoryTeacher);
+        studentForUpdate.setStudentNumber(student.getStudentNumber());
+        studentForUpdate.setUserRole(userRoleService.getUserRole(RoleType.STUDENT));
+        studentForUpdate.setActive(true);
+
+        Student updatedStudent = studentRepository.save(studentForUpdate);
+
+        return ResponseMessage.<StudentResponse>builder()
+                .message(SuccessMessages.STUDENT_UPDATE)
+                .object(studentMapper.mapStudentToStudentResponse(updatedStudent))
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
 }

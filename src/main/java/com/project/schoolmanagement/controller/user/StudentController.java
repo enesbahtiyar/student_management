@@ -26,8 +26,16 @@ public class StudentController
 
     @GetMapping("/changeStatus")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    private ResponseMessage changeStatus(@RequestParam Long id, @RequestParam boolean status)
+    public ResponseMessage changeStatus(@RequestParam Long id, @RequestParam boolean status)
     {
         return studentService.changeStatus(id,status);
+    }
+
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public ResponseMessage<StudentResponse> updateStudent(@PathVariable Long id,
+                                                          @RequestBody @Valid StudentRequest studentRequest)
+    {
+        return studentService.updateStudent(id, studentRequest);
     }
 }
