@@ -30,6 +30,7 @@ public class LessonProgramMapper
     public LessonProgramResponse mapLessonProgramToLessonProgramResponse(LessonProgram lessonProgram)
     {
         return LessonProgramResponse.builder()
+                .day(lessonProgram.getDay())
                 .startTime(lessonProgram.getStartTime())
                 .stopTime(lessonProgram.getStopTime())
                 .lessonProgramId(lessonProgram.getId())

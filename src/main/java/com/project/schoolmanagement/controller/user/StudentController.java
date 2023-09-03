@@ -1,5 +1,6 @@
 package com.project.schoolmanagement.controller.user;
 
+import com.project.schoolmanagement.payload.request.business.ChooseLessonProgramWithIdRequest;
 import com.project.schoolmanagement.payload.request.user.StudentRequest;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.StudentResponse;
@@ -8,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
@@ -37,5 +40,28 @@ public class StudentController
                                                           @RequestBody @Valid StudentRequest studentRequest)
     {
         return studentService.updateStudent(id, studentRequest);
+    }
+
+    @GetMapping("/getStudentByName")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public List<StudentResponse> getStudentsByName(@RequestParam(name = "name")String studentName)
+    {
+        return studentService.getStudentsByName(studentName);
+
+    }
+
+    @GetMapping("/getAllByAdvisorUsername")
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    public List<StudentResponse> getAllByAdvisoryTeacherUsername(HttpServletRequest httpServletRequest)
+    {
+        return studentService.getAllByAdvisoryTeacherUsername(httpServletRequest);
+    }
+
+    @PostMapping("/chooseLesson")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    public ResponseMessage<StudentResponse> chooseLesson(HttpServletRequest httpServletRequest,
+                                                         @RequestBody @Valid ChooseLessonProgramWithIdRequest chooseLessonProgramWithIdRequest)
+    {
+        return studentService.chooseLesson(httpServletRequest, chooseLessonProgramWithIdRequest);
     }
 }
