@@ -16,11 +16,14 @@ import com.project.schoolmanagement.payload.request.business.UpdateStudentInfoRe
 import com.project.schoolmanagement.payload.response.business.StudentInfoResponse;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.repository.business.StudentInfoRepository;
+import com.project.schoolmanagement.service.helper.PageableHelper;
 import com.project.schoolmanagement.service.user.StudentService;
 import com.project.schoolmanagement.service.user.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,7 @@ public class StudentInfoService
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final StudentInfoMapper studentInfoMapper;
+    private final PageableHelper pageableHelper;
 
     @Value("${midterm.exam.impact.percentage}")
     private Double midtermExamPercentage;
@@ -143,5 +147,14 @@ public class StudentInfoService
                 .httpStatus(HttpStatus.OK)
                 .object(studentInfoMapper.mapStudentInfoToStudentInfoResponse(savedStudentInfo))
                 .build();
+    }
+
+    public Page<StudentInfoResponse> getAllForStudent(HttpServletRequest httpServletRequest, int page, int size)
+    {
+        String username = (String) httpServletRequest.getAttribute("username");
+        Pageable pageable = pageableHelper.getPageableWithProperties(page,size);
+
+        return studentInfoRepository.findByStudentId_UsernameEquals(username, pageable)
+                .map(studentInfoMapper::mapStudentInfoToStudentInfoResponse);
     }
 }

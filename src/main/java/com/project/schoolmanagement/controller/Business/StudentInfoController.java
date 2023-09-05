@@ -14,7 +14,10 @@ import com.project.schoolmanagement.service.business.StudentInfoService;
 import com.project.schoolmanagement.service.user.StudentService;
 import com.project.schoolmanagement.service.user.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +47,17 @@ public class StudentInfoController
                                                                   @PathVariable Long studentInfoId)
     {
         return studentInfoService.updateStudentInfo(updateStudentInfoRequest, studentInfoId);
+    }
+
+    @GetMapping("/getAllForStudent")
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    public ResponseEntity<Page<StudentInfoResponse>> getAllForStudent(
+            HttpServletRequest httpServletRequest,
+            @RequestParam(value = "page")int page,
+            @RequestParam(value = "size")int size
+    )
+    {
+        return new ResponseEntity<>(studentInfoService.getAllForStudent(httpServletRequest, page, size), HttpStatus.OK);
     }
 
 }
