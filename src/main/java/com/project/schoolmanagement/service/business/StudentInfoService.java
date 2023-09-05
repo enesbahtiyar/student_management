@@ -7,10 +7,12 @@ import com.project.schoolmanagement.entity.concretes.user.Student;
 import com.project.schoolmanagement.entity.concretes.user.Teacher;
 import com.project.schoolmanagement.entity.enums.Note;
 import com.project.schoolmanagement.exception.ConflictException;
+import com.project.schoolmanagement.exception.ResourceNotFoundException;
 import com.project.schoolmanagement.payload.mappers.business.StudentInfoMapper;
 import com.project.schoolmanagement.payload.messages.ErrorMessages;
 import com.project.schoolmanagement.payload.messages.SuccessMessages;
 import com.project.schoolmanagement.payload.request.business.StudentInfoRequest;
+import com.project.schoolmanagement.payload.request.business.UpdateStudentInfoRequest;
 import com.project.schoolmanagement.payload.response.business.StudentInfoResponse;
 import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.repository.business.StudentInfoRepository;
@@ -109,5 +111,37 @@ public class StudentInfoService
         } else {
             return Note.AA;
         }
+    }
+
+    public StudentInfo isStudentInfoExistById(Long id)
+    {
+        return studentInfoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.STUDENT_INFO_NOT_FOUND, id)));
+    }
+
+    public ResponseMessage<StudentInfoResponse> updateStudentInfo(UpdateStudentInfoRequest updateStudentInfoRequest, Long studentInfoId)
+    {
+        StudentInfo studentInfo = isStudentInfoExistById(studentInfoId);
+        Lesson lesson = lessonService.findLessonById(updateStudentInfoRequest.getLessonId());
+        EducationTerm educationTerm = educationTermService.isEducationTermExist(updateStudentInfoRequest.getEducationTermId());
+        Double averageNote = calculateExamAverage(updateStudentInfoRequest.getMidtermExam(), updateStudentInfoRequest.getFinalExam());
+        Note note = checkLetterGrade(averageNote);
+        StudentInfo updatedStudentInfo = studentInfoMapper.mapStudentInfoUpdateToStudentInfo(updateStudentInfoRequest,
+                studentInfoId,
+                lesson,
+                educationTerm,
+                note,
+                averageNote);
+
+        updatedStudentInfo.setStudent(studentInfo.getStudent());
+        updatedStudentInfo.setTeacher(studentInfo.getTeacher());
+
+        StudentInfo savedStudentInfo = studentInfoRepository.save(updatedStudentInfo);
+
+        return ResponseMessage.<StudentInfoResponse>builder()
+                .message(SuccessMessages.STUDENT_INFO_UPDATE)
+                .httpStatus(HttpStatus.OK)
+                .object(studentInfoMapper.mapStudentInfoToStudentInfoResponse(savedStudentInfo))
+                .build();
     }
 }
