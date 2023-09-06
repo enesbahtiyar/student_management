@@ -81,6 +81,8 @@ public class StudentService
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, id)));
     }
 
+
+
     public ResponseMessage changeStatus(Long id, boolean status)
     {
         Student student = isStudentExist(id);
@@ -165,5 +167,10 @@ public class StudentService
                 .httpStatus(HttpStatus.OK)
                 .build();
 
+    }
+
+    public List<Student> getStudentByIdList(Long[] id)
+    {
+        return studentRepository.findByIdEquals(id);
     }
 }
