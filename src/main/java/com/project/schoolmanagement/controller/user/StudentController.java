@@ -6,6 +6,7 @@ import com.project.schoolmanagement.payload.response.message.ResponseMessage;
 import com.project.schoolmanagement.payload.response.user.StudentResponse;
 import com.project.schoolmanagement.service.user.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,5 +64,16 @@ public class StudentController
                                                          @RequestBody @Valid ChooseLessonProgramWithIdRequest chooseLessonProgramWithIdRequest)
     {
         return studentService.chooseLesson(httpServletRequest, chooseLessonProgramWithIdRequest);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
+    @GetMapping("/getAllStudentByPage")
+    public Page<StudentResponse> getAllStudentByPAge(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type
+    ){
+        return studentService.getAllStudentByPAge(page,size,sort,type);
     }
 }

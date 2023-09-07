@@ -56,4 +56,7 @@ public abstract class SuccessMessages
     public static final String MEET_UPDATE = "Meet is Updated Successfully";
     public static final String MEET_DELETE = "Meet is Deleted Successfully";
     public static final String MEET_FOUND = "Meet is Found Successfully";
+
+    //Advisor teacher
+    public static final String ADVISOR_TEACHER_DELETE = "Advisor Teacher Deleted Successfully";
 }
